@@ -5,7 +5,7 @@ Setup vLLM z modelem Qwen3-Coder-30B zoptymalizowany pod A40 48GB z FP8 dla maks
 ## Zalety vs GGUF/Ollama
 
 - ⚡ **5-10x szybszy inference** dzięki PagedAttention
-- 📊 **Continuous batching** - obsługa wielu requestów jednocześnie  
+- 📊 **Continuous batching** - obsługa wielu requestów jednocześnie
 - 🔌 **OpenAI-compatible API** - łatwa integracja
 - 💾 **Efektywne zarządzanie pamięcią** - lepsze wykorzystanie VRAM
 - 🎯 **Natywna obsługa długich kontekstów** - do 128K tokenów
@@ -31,9 +31,9 @@ Setup vLLM z modelem Qwen3-Coder-30B zoptymalizowany pod A40 48GB z FP8 dla maks
 ```bash
 # Klonuj/skopiuj pliki na RunPod
 cd /workspace
-git clone [YOUR_REPO] vllm-qwen-simple  # lub skopiuj przez SCP
+git clone git@github.com:lrozewicz/vllm-qwen-docker-compose.git
 
-cd vllm-qwen-simple
+cd vllm-qwen-docker-compose
 
 # Uruchom automatyczny setup
 chmod +x setup.sh
@@ -82,7 +82,7 @@ curl http://localhost:8000/v1/completions \
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "qwen3-coder", 
+    "model": "qwen3-coder",
     "messages": [
       {"role": "system", "content": "You are a helpful coding assistant."},
       {"role": "user", "content": "Write a Python web scraper using requests"}
@@ -256,13 +256,13 @@ docker run --rm --gpus all nvidia/cuda:12.0-base nvidia-smi
 Po expose port 8000 w RunPod:
 
 - **Lokalny**: `http://localhost:8000`
-- **Publiczny**: `http://[RUNPOD_IP]:8000` 
+- **Publiczny**: `http://[RUNPOD_IP]:8000`
 - **Proxy**: `https://[POD_ID]-8000.proxy.runpod.net`
 
 ## Model Information
 
 - **Nazwa**: unsloth/Qwen3-Coder-30B-A3B-Instruct
-- **Rozmiar**: ~30B parametrów  
+- **Rozmiar**: ~30B parametrów
 - **Precyzja**: BFloat16 + FP8 KV Cache
 - **Kontekst**: 250K tokenów (A40 optimized), do 256K max
 - **Specjalizacja**: Kodowanie, programowanie
