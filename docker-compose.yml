@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  vllm:
+    image: vllm/vllm-openai:latest
+    container_name: vllm-qwen3-coder
+    restart: unless-stopped
+    
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - VLLM_ATTENTION_BACKEND=FLASHINFER
+      - HF_HOME=/app/.cache/huggingface
+    
+    ports:
+      - "8000:8000"
+    
+    volumes:
+      - vllm-cache:/app/.cache/huggingface
+      - vllm-logs:/app/logs
+    
+    command: >
+      --model unsloth/Qwen3-Coder-30B-A3B-Instruct
+      --host 0.0.0.0
+      --port 8000
+      --tensor-parallel-size 1
+      --max-model-len 250000
+      --gpu-memory-utilization 0.92
+      --dtype bfloat16
+      --kv-cache-dtype fp8_e4m3
+      --trust-remote-code
+      --disable-log-requests
+      --served-model-name qwen3-coder
+      --enable-auto-tool-choice
+      --max-num-seqs 64
+      --swap-space 8
+      --block-size 16
+      --num-scheduler-steps 10
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 600s
+    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+
+volumes:
+  vllm-cache:
+    driver: local
+  vllm-logs:
+    driver: local
