@@ -31,7 +31,7 @@ Setup vLLM z modelem Qwen3-Coder-30B zoptymalizowany pod A40 48GB z FP8 dla maks
 ```bash
 # Klonuj/skopiuj pliki na RunPod
 cd /workspace
-git clone git@github.com:lrozewicz/vllm-qwen-docker-compose.git
+git clone https://github.com/lrozewicz/vllm-qwen-docker-compose.git
 
 cd vllm-qwen-docker-compose
 
