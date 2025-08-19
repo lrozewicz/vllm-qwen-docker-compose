@@ -37,7 +37,7 @@ cd vllm-qwen-docker-compose
 
 # Uruchom automatyczny setup
 chmod +x setup.sh
-sudo ./setup.sh
+./setup.sh
 ```
 
 ## Ręczne uruchomienie
